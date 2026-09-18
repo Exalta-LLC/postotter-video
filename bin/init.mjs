@@ -106,19 +106,37 @@ function sourceRootFor(cssEntry) {
   return path.dirname(cssEntry);
 }
 
+/** Tailwind 4 moved the config INTO the CSS: `@import "tailwindcss"` and an
+ *  `@theme` block, with no JS config file anywhere and content auto-detected.
+ *  A detector that looks for tailwind.config.* therefore sees nothing at all in
+ *  a current project — which is most new ones, and nearly all vibecoded ones. */
+function isV4(cssText) {
+  return /@import\s+["']tailwindcss["']/.test(cssText);
+}
+
 /** Their Tailwind binary.
  *
  *  Order matters on Windows: node_modules/.bin holds BOTH an extensionless
  *  shell script and a .cmd shim, and Node cannot spawn the former — it is bash.
  *  Trying it first fails with ENOENT on every Windows machine, which is a
  *  quarter of the people who will run this. */
-function tailwindBin() {
+function tailwindBin(v4) {
+  const stem = v4 ? "tailwindcss" : "tailwindcss";
   const names = process.platform === "win32"
-    ? ["tailwindcss.cmd", "tailwindcss.CMD", "tailwindcss.ps1", "tailwindcss"]
-    : ["tailwindcss"];
+    ? [`${stem}.cmd`, `${stem}.CMD`, `${stem}.ps1`, stem]
+    : [stem];
   for (const n of names) {
     const p = findUp([path.join("node_modules", ".bin", n)]);
-    if (p) return p;
+    if (p) return { cmd: p, args: [] };
+  }
+  // v4 ships its CLI as a separate package that a PostCSS-only setup will not
+  // have installed. Fetching it on demand beats telling somebody to go and add
+  // a dependency to their app so that a video tool can read their colours.
+  if (v4) {
+    return {
+      cmd: process.platform === "win32" ? "npx.cmd" : "npx",
+      args: ["--yes", "@tailwindcss/cli@4"],
+    };
   }
   return null;
 }
@@ -126,7 +144,9 @@ function tailwindBin() {
 /* ── compile their stylesheet ────────────────────────────────────── */
 
 function compileCss(configPath, cssEntry, outDir) {
-  const bin = tailwindBin();
+  const entryText = fs.readFileSync(cssEntry, "utf8");
+  const v4 = isV4(entryText);
+  const bin = tailwindBin(v4);
   if (!bin) return { ok: false, why: "no tailwindcss binary in node_modules/.bin" };
 
   // Their config's content globs are relative to the config, which in a
@@ -135,31 +155,50 @@ function compileCss(configPath, cssEntry, outDir) {
   // that looks fine and styles nothing. Scan the tree the entry actually lives
   // in instead.
   const srcRoot = sourceRootFor(cssEntry).split(path.sep).join("/");
-  const shim = path.join(outDir, ".tw.config.cjs");
-  fs.writeFileSync(
-    shim,
-    `const base = require(${JSON.stringify(configPath.split(path.sep).join("/"))});
+  let shim = null;
+  let extra = "";
+
+  if (v4) {
+    // v4 auto-detects sources relative to the CSS file, and this one is being
+    // compiled from a temp location — so point it at the real tree explicitly.
+    extra = `
+@source ${JSON.stringify(srcRoot + "/**/*.{ts,tsx,js,jsx,html,mdx}")};
+`;
+  } else {
+    shim = path.join(outDir, ".tw.config.cjs");
+    fs.writeFileSync(
+      shim,
+      `const base = require(${JSON.stringify(configPath.split(path.sep).join("/"))});
 ` +
-      `const cfg = base.default || base;
+        `const cfg = base.default || base;
 ` +
-      `module.exports = { ...cfg, content: [${JSON.stringify(srcRoot + "/**/*.{ts,tsx,js,jsx,html,mdx}")}] };
+        `module.exports = { ...cfg, content: [${JSON.stringify(srcRoot + "/**/*.{ts,tsx,js,jsx,html,mdx}")}] };
 `
-  );
+    );
+  }
 
   // Their entry may @import things a standalone build cannot resolve (fonts,
   // map SDKs). Those are the app's concern, not the video's.
-  const src = fs.readFileSync(cssEntry, "utf8").replace(/^@import\s+['"][^'"]+['"];?\s*$/gm, "");
+  // Drop imports a standalone build cannot resolve (fonts, map SDKs) — but
+  // never the one that IS Tailwind.
+  const src = entryText.replace(/^@import\s+['"]([^'"]+)['"];?\s*$/gm, (m, spec) =>
+    spec === "tailwindcss" ? m : ""
+  );
   const tmpIn = path.join(outDir, ".brand-in.css");
   const tmpOut = path.join(outDir, ".brand-out.css");
-  fs.writeFileSync(tmpIn, src);
+  fs.writeFileSync(tmpIn, src + extra);
 
   try {
-    execFileSync(bin, ["-c", shim, "-i", tmpIn, "-o", tmpOut, "--minify"], {
+    execFileSync(
+      bin.cmd,
+      [...bin.args, ...(shim ? ["-c", shim] : []), "-i", tmpIn, "-o", tmpOut, "--minify"],
+      {
       stdio: "pipe",
-      cwd: path.dirname(configPath),
+      cwd: cwd,
       // A .cmd shim is not an executable Node can spawn directly on Windows.
       shell: process.platform === "win32",
-    });
+      }
+    );
   } catch (e) {
     fs.rmSync(tmpIn, { force: true });
     return { ok: false, why: (e.stderr?.toString() || e.message).split("\n")[0] };
@@ -170,7 +209,7 @@ function compileCss(configPath, cssEntry, outDir) {
   fs.rmSync(tmpOut, { force: true });
 
   const esc = css.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\${");
-  return { ok: true, bytes: css.length, module: `// Your compiled stylesheet, verbatim.
+  return { ok: true, bytes: css.length, v4, module: `// Your compiled stylesheet, verbatim.
 //
 // Built from your own Tailwind config against your own source, so a surface can
 // be written in YOUR class names — copied out of your components — rather than
@@ -305,27 +344,29 @@ function main() {
   const skipped = [];
 
   // 1. their stylesheet
-  const config = findUp(["tailwind.config.ts", "tailwind.config.js", "tailwind.config.cjs", "tailwind.config.mjs"]);
-  const candidates = config ? findCssEntries() : [];
+  // Look for the stylesheet FIRST. Tailwind 4 has no config file, so gating the
+  // search on finding one makes every current project look like it has no
+  // Tailwind at all.
+  const candidates = findCssEntries();
   const cssEntry = candidates[0] ?? null;
+  const config = findUp(["tailwind.config.ts", "tailwind.config.js", "tailwind.config.cjs", "tailwind.config.mjs"]);
   let cssNote = "";
   let hasCss = false;
 
-  if (config && cssEntry) {
+  if (cssEntry) {
     const r = compileCss(config, cssEntry, outDir);
     if (r.ok) {
       write(path.join(outDir, "brand-css.ts"), r.module, written, skipped);
       hasCss = true;
       cssNote =
-        `compiled ${(r.bytes / 1024).toFixed(0)}KB from ${rel(cssEntry)}` +
+        `compiled ${(r.bytes / 1024).toFixed(0)}KB from ${rel(cssEntry)} (Tailwind ${r.v4 ? "4" : "3"})` +
         (candidates.length > 1 ? `  (${candidates.length - 1} other stylesheet(s) found — check this is the app's)` : "");
     } else {
       cssNote = `could not compile your CSS (${r.why}) — surfaces will need inline styles`;
     }
   } else {
-    cssNote = config
-      ? "found a Tailwind config but no stylesheet with @tailwind in it"
-      : "no Tailwind config found — if you use another system, load its CSS yourself";
+    cssNote =
+      "no stylesheet with @tailwind or @import \"tailwindcss\" found — if you use another system, load its CSS yourself";
   }
 
   // 2. a project that already runs
