@@ -1,5 +1,5 @@
 {
-  "name": "@postotter/film-grammar",
+  "name": "postotter-video",
   "version": "0.1.0",
   "description": "Turn your app's own screens into social video. Remotion primitives for the edit — taps, holds, cuts, captions, safe areas — while your components stay yours.",
   "keywords": ["remotion", "video", "demo", "product-demo", "reels", "tiktok", "claude", "agent", "skill"],
@@ -12,5 +12,5 @@
     "react": ">=18",
     "remotion": ">=4"
   },
-  "repository": { "type": "git", "url": "git+https://github.com/Exalta-LLC/film-grammar.git" }
+  "repository": { "type": "git", "url": "git+https://github.com/Exalta-LLC/postotter-video.git" }
 }

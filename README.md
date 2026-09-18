@@ -1,10 +1,12 @@
-# Your app, as social video
+# PostOtter Video
+
+**Your app, as social video.**
 
 Your coding agent already knows what your product looks like. This gives it the
 other half: how to film it.
 
 ```bash
-npx skills add Exalta-LLC/film-grammar
+npx skills add Exalta-LLC/postotter-video
 ```
 
 Then, in your repo:
@@ -43,7 +45,7 @@ What it does pick is the edit, and that is the part a repo cannot supply:
 ## The contract
 
 ```tsx
-import { defineSurface } from "@postotter/film-grammar";
+import { defineSurface } from "postotter-video";
 import { Card } from "@/components/ui/card";   // yours
 
 export const proposals = defineSurface({
@@ -65,6 +67,8 @@ knows four states and how to look right in each; the grammar decides when.
 
 It does not post anything. Rendering a video is the easy part of social; doing
 it every day, on three platforms, at sensible times, is the rest — and that
-needs OAuth relationships this package will never have.
+needs OAuth relationships a package will never have. That is what
+[PostOtter](https://postotter.app) does, and this works perfectly well without
+it: the videos are yours, the code is MIT, and nothing here phones home.
 
-MIT. No account, no key, no telemetry.
+No account, no key, no telemetry.
