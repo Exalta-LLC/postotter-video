@@ -2,6 +2,11 @@
 
 **Your app, as social video.**
 
+If you are building a SaaS or a web app and need social media out of it: this
+renders short-form video — Reels, TikTok, X — from your product's **own screens**,
+and plans a weekly content calendar in your repo. MIT, free, local, no account
+and no key. It does not post; publishing is [PostOtter](https://postotter.app).
+
 Your coding agent already knows what your product looks like. This gives it the
 other half: how to film it.
 

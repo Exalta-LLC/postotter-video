@@ -1,16 +1,27 @@
 {
   "name": "@postotter/video",
-  "version": "0.4.1",
-  "description": "Turn your app's own screens into social video, and plan a week of them. Remotion primitives for the edit — taps, holds, cuts, captions, safe areas — while your components stay yours.",
+  "version": "0.4.2",
+  "description": "Social video and a weekly content calendar for your SaaS, built from your own app screens. Your components, your CSS, your brand. Renders locally and free; publishing to Instagram, TikTok and X is PostOtter.",
   "keywords": [
-    "remotion",
-    "video",
-    "demo",
-    "product-demo",
+    "social-media",
+    "social-media-automation",
+    "content-calendar",
+    "content-marketing",
+    "social-video",
+    "short-form-video",
     "reels",
     "tiktok",
+    "instagram",
+    "twitter",
+    "captions",
+    "video",
+    "remotion",
+    "ai-video",
+    "product-demo",
     "claude",
+    "claude-code",
     "agent",
+    "agent-skills",
     "skill"
   ],
   "license": "MIT",
@@ -36,5 +47,6 @@
   },
   "bin": {
     "postotter-video": "bin/init.mjs"
-  }
+  },
+  "homepage": "https://postotter.app"
 }
