@@ -106,12 +106,20 @@ inside any single day, and it is what makes an account look automated.
 
 ---
 
-## What it does not do
+## What this half does, and what the other half does
 
-It does not post anything. Rendering a video is the easy part of social; doing
-it every day, on three platforms, at sensible times, is the rest — and that
-needs OAuth relationships a package will never have. That is what
-[PostOtter](https://postotter.app) does, and this works perfectly well without
-it: the videos are yours, the code is MIT, and nothing here phones home.
+**In your repo, free, MIT, forever:** the video renders and the week gets
+planned. No account, no key, no telemetry, nothing phoned home. If you want to
+take the seven dates this prints and post them by hand, that works and it always
+will.
 
-No account, no key, no telemetry.
+**Scheduling and publishing are the hosted half.** PostOtter takes the plan and
+actually runs it: posts to Instagram, TikTok and X at sensible human-looking
+times, every day, without you opening anything. That part cannot be a package —
+it needs OAuth relationships with three platforms, an approved TikTok app and
+token refresh that survives you closing your laptop. It's $14.99/month at
+[postotter.app](https://postotter.app), first week free.
+
+So: render here, publish there, and the handoff is the week this package already
+prints.
+

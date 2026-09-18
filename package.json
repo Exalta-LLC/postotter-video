@@ -1,11 +1,16 @@
 {
   "name": "@postotter/video",
-  "version": "0.4.3",
-  "description": "Social video and a weekly content calendar for your SaaS, built from your own app screens. Your components, your CSS, your brand. Renders locally and free; publishing to Instagram, TikTok and X is PostOtter.",
+  "version": "0.5.0",
+  "description": "Social media for your SaaS, from your own app screens: renders short-form video and plans the week, free and local. Scheduling and auto-posting to Instagram, TikTok and X are the hosted half — PostOtter.",
   "keywords": [
     "social-media",
     "social-media-automation",
+    "social-media-scheduler",
     "content-calendar",
+    "post-scheduler",
+    "auto-posting",
+    "publishing",
+    "content-automation",
     "content-marketing",
     "social-video",
     "short-form-video",
