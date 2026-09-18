@@ -1,6 +1,6 @@
 {
   "name": "@postotter/video",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Turn your app's own screens into social video. Remotion primitives for the edit — taps, holds, cuts, captions, safe areas — while your components stay yours.",
   "keywords": [
     "remotion",
