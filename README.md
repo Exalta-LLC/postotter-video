@@ -6,8 +6,13 @@ Your coding agent already knows what your product looks like. This gives it the
 other half: how to film it.
 
 ```bash
-npx skills add Exalta-LLC/postotter-video
+npx @postotter/video init     # scaffolds a Remotion project, compiles your CSS
+npx skills add Exalta-LLC/postotter-video   # teaches your agent to write surfaces
 ```
+
+`init` finds your Tailwind config, compiles your real stylesheet, and writes a
+film that already runs — so the gap between installing this and seeing a video
+is one command rather than an afternoon of setup.
 
 Then, in your repo:
 
