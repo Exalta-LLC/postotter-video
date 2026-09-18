@@ -9,7 +9,7 @@
       "name": "postotter-video",
       "source": "./plugins/postotter-video",
       "description": "Make social media content for a web app or SaaS out of its own screens — short-form video for Reels, TikTok and X, plus a weekly plan of what goes out on which day.",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "license": "MIT",
       "homepage": "https://postotter.app",
       "repository": "https://github.com/Exalta-LLC/postotter-video",
