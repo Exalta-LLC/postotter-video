@@ -45,7 +45,7 @@ What it does pick is the edit, and that is the part a repo cannot supply:
 ## The contract
 
 ```tsx
-import { defineSurface } from "postotter-video";
+import { defineSurface } from "@postotter/video";
 import { Card } from "@/components/ui/card";   // yours
 
 export const proposals = defineSurface({

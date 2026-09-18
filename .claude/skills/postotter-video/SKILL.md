@@ -145,7 +145,7 @@ customer they disagree.
 ## 4. The contract
 
 ```tsx
-import { defineSurface, type SurfaceProps } from "postotter-video";
+import { defineSurface, type SurfaceProps } from "@postotter/video";
 
 export const symptomSearch = defineSurface<SymptomSearchData>({
   id: "symptom-search",
