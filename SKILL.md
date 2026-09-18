@@ -248,6 +248,41 @@ where being wrong hurts someone, the surface and its data carry that weight too.
 
 ---
 
+## 8. Plan the week, not the video
+
+One good video is where everybody stops, and it is not the job. The job is that
+there is one on Thursday too, and that Thursday's is not Tuesday's.
+
+```
+npx tsx postotter/week.ts
+```
+
+No model, no render, nothing spent — it is arithmetic over the library and the
+date. Read it before writing another line of surface code, because it answers
+the only question that matters at this stage: **does this library survive seven
+days?**
+
+What it tells you, and what to do about it:
+
+- **`reruns an earlier day`** — the library is too small. Two identical films
+  four days apart is what makes an account look automated, and it is invisible
+  from inside any one day. Write another surface.
+- **`surface(s) the week never reaches`** — you wrote screens the rotation does
+  not draw. Either they are not worth filming, or the run is too short to show
+  them. Both are worth knowing before you polish them.
+- **`opens on the same screen as the day before`** — softer, but the first second
+  decides whether anyone watches the rest.
+
+Aim for a library that carries **fourteen days without a rerun**, not seven. A
+week that exactly fits is a week with no slack, and the first surface you delete
+breaks it.
+
+Plan with the real `brandId` you will keep using. The rotations are seeded on it,
+so the same brand and the same day always plan the same film — which is what
+makes a retry safe and a plan worth showing someone.
+
+---
+
 ## What good looks like
 
 A stranger scrolling past should recognise the product, and someone who uses it

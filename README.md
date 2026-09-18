@@ -68,6 +68,39 @@ knows four states and how to look right in each; the grammar decides when.
 
 `SKILL.md` is the full authoring guide, and it is what your agent reads.
 
+## A week, not a video
+
+```
+npx tsx postotter/week.ts
+```
+
+```
+  A week of Scanly
+
+    Sun 09-20   17.5s  share → scan
+                tiktok, instagram, x
+    Mon 09-21   17.5s  history → plan
+                tiktok, instagram, x
+    Tue 09-22   17.5s  share → results
+                tiktok, instagram, x
+    Wed 09-23   17.5s  plan → scan
+                tiktok, x
+    ...
+
+    7 films, 19 posts
+    reruns an earlier day: 09-24 — the library is too small for 7 days
+```
+
+Costs nothing and calls nothing — it is arithmetic over your surfaces and the
+date. TikTok takes something every day, Instagram takes five and the five rotate,
+and the draw is seeded on your brand so two products never run the same week and
+a retry never produces a different video for a day you already posted.
+
+The useful part is the warnings. A library that reruns itself is invisible from
+inside any single day, and it is what makes an account look automated.
+
+---
+
 ## What it does not do
 
 It does not post anything. Rendering a video is the easy part of social; doing

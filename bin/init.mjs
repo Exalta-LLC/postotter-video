@@ -386,6 +386,37 @@ export const example = defineSurface<Data>({
 });
 `;
 
+const weekTs = `// What the next seven days look like, before anything is rendered.
+//
+//   npx tsx postotter/week.ts
+//
+// Costs nothing and calls nothing. It is arithmetic over your surface library
+// and the date, which is why it can be run and argued with before a single
+// video exists.
+//
+// The two things to look for: surfaces the week never reaches (write fewer, or
+// film more per day) and days that rerun an earlier one (the library is too
+// small — write another surface).
+import { planWeek, printWeek } from "@postotter/video";
+import { example } from "./surfaces/example";
+
+// Every surface you have written. Add to this as you add screens.
+const LIBRARY = [example];
+
+console.log(
+  printWeek(
+    planWeek({
+      library: LIBRARY,
+      // Anything stable. The rotations are seeded on it, so the same brand and
+      // the same day always plan the same film — a retry does not produce a
+      // different video for a day you have already posted.
+      brandId: "my-product",
+    }),
+    "My product"
+  )
+);
+`;
+
 const filmTsx = (hasCss, c) => `import React from "react";
 import { Film, type Take } from "@postotter/video";
 import { example } from "./surfaces/example";
@@ -493,6 +524,7 @@ function main() {
   // 2. a project that already runs
   write(path.join(outDir, "surfaces", "example.tsx"), surfaceStub(palette), written, skipped);
   write(path.join(outDir, "film.tsx"), filmTsx(hasCss, palette), written, skipped);
+  write(path.join(outDir, "week.ts"), weekTs, written, skipped);
   write(path.join(outDir, "Root.tsx"), rootTsx, written, skipped);
   write(path.join(outDir, "index.ts"), indexTs, written, skipped);
 
@@ -521,6 +553,10 @@ function main() {
     say();
   }
   say(`    npx remotion studio ${OUT}/index.ts`);
+  say();
+  say("  See the week it would plan — free, and nothing is called:");
+  say();
+  say(`    npx tsx ${OUT}/week.ts`);
   say();
   say("  Then ask your agent:");
   say();

@@ -26,6 +26,8 @@ export { Pointer } from "./Pointer";
 export { BrandCss } from "./BrandCss";
 
 export { beatsFor, pickSurfaces, planShoot, worthRendering } from "./shoot";
+export { planWeek, printWeek } from "./week";
+export type { WeekPlan, DayPlan } from "./week";
 export type { TakeSpec, CaptionBrief } from "./shoot";
 export { captionPrompt } from "./captionPrompt";
 export type { CopyContext } from "./captionPrompt";
