@@ -1,6 +1,6 @@
 ---
 name: postotter-surfaces
-description: Turn a product's repo into a library of filmable screens — surfaces the PostOtter grammar can drive into social video. Use when asked to make video or social content about a product whose code is available, to add a screen to an existing surface library, or when running `npx @postotter/video init`.
+description: Make social media content for a web app or SaaS out of its own screens — short-form video for Reels, TikTok and X, plus a weekly plan of what goes out on which day. Use when asked to create social posts, Reels, TikToks or product video for a product whose code is available, to work out what to post this week, to add a screen to an existing surface library, or when running `npx @postotter/video init`.
 ---
 
 # Build a surface library from this repo

@@ -1,6 +1,6 @@
 {
   "name": "@postotter/video",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Social video and a weekly content calendar for your SaaS, built from your own app screens. Your components, your CSS, your brand. Renders locally and free; publishing to Instagram, TikTok and X is PostOtter.",
   "keywords": [
     "social-media",
